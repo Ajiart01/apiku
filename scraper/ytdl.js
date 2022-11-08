@@ -1,0 +1,94 @@
+let fetch = require('node-fetch')
+let { JSDOM } = require('jsdom')
+
+function post(url, formdata) {
+  return fetch(url, {
+    method: 'POST',
+    headers: {
+            "content-type": 'application/x-www-form-urlencoded; charset=UTF-8',
+            "origin": 'https://www.y2mate.com',
+      "sec-ch-ua": '" Not;A Brand";v="99", "Google Chrome";v="91", "Chromium";v="91"',
+			"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+			"Cookie": 'PHPSESSID=6jo2ggb63g5mjvgj45f612ogt7; _ga=GA1.2.405896420.1625200423; _gid=GA1.2.2135261581.1625200423; _PN_SBSCRBR_FALLBACK_DENIED=1625200785624; MarketGidStorage={"0":{},"C702514":{"page":5,"time":1625200846733}}'
+        },
+    body: new URLSearchParams(Object.entries(formdata))
+  })
+}
+const ytIdRegex = /(?:http(?:s|):\/\/|)(?:(?:www\.|)youtube(?:\-nocookie|)\.com\/(?:shorts\/)?(?:watch\?.*(?:|\&)v=|embed\/|v\/)|youtu\.be\/)([-_0-9A-Za-z]{11})/
+
+/**
+ * Download YouTube Video via y2mate
+ * @param {String} url YouTube Video URL
+ * @param {String} quality (avaiable: `144p`, `240p`, `360p`, `480p`, `720p`, `1080p`, `1440p`, `2160p`)
+ * @param {String} type (avaiable: `mp3`, `mp4`)
+ * @param {String} bitrate (avaiable for video: `144`, `240`, `360`, `480`, `720`, `1080`, `1440`, `2160`)
+ * (avaiable for audio: `128`)
+ * @param {String} server (avaiable: `id4`, `en60`, `en61`, `en68`)
+ */
+async function yt(url, quality, type, bitrate, server = 'en68') {
+  if (!ytIdRegex.test(url)) throw 'Invalid URL'
+  let ytId = ytIdRegex.exec(url)
+  url = 'https://youtu.be/' + ytId[1]
+  let res = await post(`https://www.y2mate.com/mates/${server}/analyze/ajax`, {
+    url,
+    q_auto: 0,
+    ajax: 1
+  })
+  let json = await res.json()
+  let { document } = (new JSDOM(json.result)).window
+  let tables = document.querySelectorAll('table')
+  let table = tables[{ mp4: 0, mp3: 1 }[type] || 0]
+  let list
+  switch (type) {
+    case 'mp4':
+      list = Object.fromEntries([...table.querySelectorAll('td > a[href="#"]')].filter(v => !/\.3gp/.test(v.innerHTML)).map(v => [v.innerHTML.match(/.*?(?=\()/)[0].trim(), v.parentElement.nextSibling.nextSibling.innerHTML]))
+      break
+    case 'mp3':
+      list = {
+        '128kbps': table.querySelector('td > a[href="#"]').parentElement.nextSibling.nextSibling.innerHTML
+      }
+      break
+    default:
+      list = {}
+  }
+  let filesize = list[quality]
+  let id = /var k__id = "(.*?)"/.exec(document.body.innerHTML) || ['', '']
+  let thumb = document.querySelector('img').src
+  let title = document.querySelector('b').innerHTML
+  let res2 = await post(`https://www.y2mate.com/mates/${server}/convert`, {
+    type: 'youtube',
+    _id: id[1],
+    v_id: ytId[1],
+    ajax: '1',
+    token: '',
+    ftype: type,
+    fquality: bitrate
+  })
+  let json2 = await res2.json()
+  let KB = parseFloat(filesize) * (1000 * /MB$/.test(filesize))
+  return {
+    dl_link: /<a.+?href="(.+?)"/.exec(json2.result)[1].replace("https://", "http://"),
+    thumb,
+    title,
+    filesizeF: filesize,
+    filesize: KB
+  }
+}
+
+module.exports = {
+  yt,
+  ytIdRegex,
+  /**
+   * Download YouTube Video as Audio via y2mate
+   * @param {String} url YouTube Video URL
+   * @param {String} server (avaiable: `id4`, `en60`, `en61`, `en68`)
+   */
+  yta(url, server = 'en410') { return yt(url, '128kbps', 'mp3', '128', server) },
+  /**
+   * Download YouTube Video as Video via y2mate
+   * @param {String} url YouTube Video URL
+   * @param {String} server (avaiable: `id4`, `en60`, `en61`, `en68`)
+   */
+  ytv(url, server = 'en410') { return yt(url, '480p', 'mp4', '360', server) },
+  servers: ['id4', 'en60', 'en61', 'en68']
+}
