@@ -1,12 +1,12 @@
 {
-  "name": "api-ari",
-  "version": "2.1.0",
-  "description": "arpi-ari",
+  "name": "simple-apid",
+  "version": "2.0.0",
+  "description": "Simpe-API",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "ada lah asasas",
+  "author": "ada lah",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.22.0",
@@ -69,14 +69,5 @@
     "tiktok-scraper": "^1.4.36",
     "translate-google": "^1.5.0",
     "yt-search": "^2.9.0"
-  },
- "repository": {
-    "type": "git",
-    "url": "git+https://github.com/akuwaee/simple-api.git"
-  },
-  "keywords": [],
-  "bugs": {
-    "url": "https://github.com/akuwaee/simple-api/issues"
-  },
-  "homepage": "https://github.com/akuwaee/simple-api#readme"
+  }
 }
