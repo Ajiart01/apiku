@@ -3,25 +3,23 @@
   "version": "2.0.0",
   "description": "arpi-ari",
   "main": "index.js",
+   "engines": {
+    "node": "16.17.0"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "author": "ada lah asasas",
   "license": "ISC",
   "dependencies": {
-    "1cak-scraper": "0.0.2",
+    "axios": "^0.22.0",
     "@bochilteam/scraper": "^3.0.0",
-    "@edsdk/file-uploader-server": "^1.0.9",
     "FormData": "^0.10.1",
     "adm-zip": "^0.5.9",
-    "axios": "^0.22.0",
     "bing-scraper": "^1.4.11",
     "brainly-scraper": "^1.0.3",
     "caliph-api": "^0.9.3",
     "camaro": "^6.2.0",
-    "canvacord": "^5.4.6",
-    "canvas": "^2.6.1",
-    "canvas-hikki": "git+https://github.com/orderku/canvas-hikki.git",
     "chalk": "^5.0.1",
     "cheerio": "^1.0.0-rc.12",
     "cloudflare-bypasser": "0.0.3",
@@ -31,8 +29,6 @@
     "esm": "^3.2.25",
     "express": "^4.18.1",
     "fb-downloader": "^1.0.3",
-    "ffmpeg": "0.0.4",
-    "ffmpeg-static": "^5.1.0",
     "file-type": "^16.5.4",
     "form-data": "^4.0.0",
     "fs": "^0.0.1-security",
@@ -78,17 +74,9 @@
     "tiktok-scraper": "^1.4.36",
     "translate-google": "^1.5.0",
     "url": "^0.11.0",
-    "yt-search": "^2.9.0",
-    "ytdl-core": "^4.11.2",
-    "zip-a-folder": "^1.1.5"
+    "yt-search": "^2.9.0"
   },
-  "directories": {
-    "lib": "lib"
-  },
-  "devDependencies": {
-    "node": "^16.17.0"
-  },
-  "repository": {
+ "repository": {
     "type": "git",
     "url": "git+https://github.com/akuwaee/simple-api.git"
   },
