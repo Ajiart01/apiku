@@ -1,11 +1,8 @@
 {
   "name": "api-ari",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "arpi-ari",
   "main": "index.js",
-  "engines": {
-    "node": "14.x"
-  },
   "scripts": {
     "start": "node index.js"
   },
