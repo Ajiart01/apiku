@@ -3,9 +3,7 @@ var router = express.Router();
 const { getBuffer } = require('../lib/function')
 const axios = require('axios')
 const fetch = require('node-fetch')
-const knights = require("knights-canvas");
 const fs = require('fs')
-const  ch = require('canvas-hikki')
 const moment = require('moment-timezone')
 
 
