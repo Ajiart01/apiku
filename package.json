@@ -3,9 +3,10 @@
   "version": "2.0.0",
   "description": "Simpe-API",
   "main": "index.js",
-  "scripts": {
-    "test": "node index.js"
-  },
+"scripts": {
+    "start": "pm2 start index.js --deep-monitoring --attach --name astro",
+    "stop": "pm2 stop astro"
+    },
   "author": "ada lah",
   "license": "ISC",
   "dependencies": {
