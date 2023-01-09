@@ -8,8 +8,6 @@ const { ffmpeg, toAudio } = require('../lib/converter')
 const axios = require('axios')
 const { getBuffer } = require('../lib/function')
 
-const deepai = require('deepai');
-deepai.setApiKey('8d4a8257-af38-4502-a2bb-af1d1938090e');
 
 async function apivisit() {
 const birthday = new Date();
